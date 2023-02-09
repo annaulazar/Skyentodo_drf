@@ -2,11 +2,6 @@ version: "3.9"
 
 volumes:
   postgres:
-  api:
-
-networks:
-  back:
-  front:
 
 services:
   postgres:
@@ -17,39 +12,33 @@ services:
     env_file:
       - ./.env
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_USER: $DB_USER
+      POSTGRES_DB: $DB_NAME
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready -U ${DB_USER} -d ${DB_NAME}
+      test: pg_isready -U $DB_USER -d $DB_NAME
       interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - back
 
   migrations:
-    build:
-      context: .
-    image: ann74/skyentodo
+    image: ann74/skyentodo:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     depends_on:
       postgres:
         condition: service_healthy
+    volumes:
+      - ./.env:/app/.env
     command: sh -c "python manage.py migrate --noinput"
-    networks:
-      - back
 
   api:
-    build:
-      context: .
+    image: ann74/skyentodo:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     restart: always
-    image: ann74/skyentodo
-    volumes:
-      - ./:/app
     env_file:
       - ./.env
+    volumes:
+      - ./.env:/app/.env
     command: sh -c "python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
@@ -58,9 +47,6 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
-    networks:
-      - back
-      - front
 
   front:
     image: sermalenk/skypro-front:lesson-34
@@ -69,6 +55,3 @@ services:
       - "8080:80"
     depends_on:
       - api
-    networks:
-      - back
-      - front
