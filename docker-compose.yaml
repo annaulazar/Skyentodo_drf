@@ -33,7 +33,6 @@ services:
   migrations:
     build:
       context: .
-    image: ann74/skyentodo
     depends_on:
       postgres:
         condition: service_healthy
@@ -45,7 +44,6 @@ services:
     build:
       context: .
     restart: always
-    image: ann74/skyentodo
     volumes:
       - ./:/app
     env_file:
@@ -63,7 +61,7 @@ services:
       - front
 
   front:
-    image: sermalenk/skypro-front:lesson-34
+    image: sermalenk/skypro-front:lesson-35
     restart: always
     ports:
       - "8080:80"

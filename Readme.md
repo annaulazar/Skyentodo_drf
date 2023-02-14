@@ -27,3 +27,5 @@
 python3.11, Django, DRF, Postgres
 
 ### Запуск:
+Локально - в дирректории проекта выполнить команду:
+docker-compose up
