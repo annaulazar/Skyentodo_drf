@@ -46,8 +46,8 @@ class BoardParticipant(DatesModelMixin):
     editable_choices = Role.choices
     editable_choices.pop(0)
 
-    board = models.ForeignKey(Board, on_delete=models.PROTECT, related_name="boardparticipants", verbose_name="Доска")
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="boardparticipants", verbose_name="Пользователь")
+    board = models.ForeignKey(Board, on_delete=models.PROTECT, related_name="participants", verbose_name="Доска")
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="participants", verbose_name="Пользователь")
     role = models.PositiveSmallIntegerField(choices=Role.choices, default=Role.owner, verbose_name="Роль")
 
 
