@@ -7,7 +7,7 @@ NULLABLE = {"null": True, "blank": True}
 
 
 class TgUser(models.Model):
-    tg_chat_id = models.BigIntegerField(unique=True)
+    chat_id = models.BigIntegerField(unique=True)
     username = models.CharField(max_length=255, **NULLABLE, default=None)
     user = models.ForeignKey(User, models.PROTECT, **NULLABLE, default=None)
     verification_code = models.CharField(max_length=32)

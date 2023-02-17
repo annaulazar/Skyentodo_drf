@@ -48,6 +48,15 @@ services:
       migrations:
         condition: service_completed_successfully
 
+  bot:
+      image: ann74/skyentodo:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+      depends_on:
+        postgres:
+          condition: service_healthy
+      volumes:
+        - ./.env:/app/.env
+      command: python manage.py runbot
+
   front:
     image: sermalenk/skypro-front:lesson-38
     restart: always
